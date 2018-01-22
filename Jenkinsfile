@@ -40,7 +40,7 @@ pipeline {
     stage('Running on CentOS') {
          agent{
             label 'centOS'
-        }
+        
 
         steps{
             sh "wget http://sakkela3.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
