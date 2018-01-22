@@ -26,6 +26,11 @@ pipeline {
             steps{
               sh 'ant -f build.xml -v'
             }
+            post{
+                success{
+                    archiveArtifacts artifacts: 'dist/*.jar', fingerprint: true
+                }
+            }
         }
         stage('deploy') {
              agent{
@@ -44,15 +49,11 @@ pipeline {
             }
             steps{
                 sh "wget http://sakkela3.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
-                sh "java -jar rectanlge__${env.BUILD_NUMBER}.jar 3 4"
+                sh "java -jar rectanlge_${env.BUILD_NUMBER}.jar 3 4"
 
         }
     }
     }
-    post{
-        always{
-            archiveArtifacts artifacts: 'dist/*.jar', fingerprint: true
-        }
-    }
+   
 
 }
