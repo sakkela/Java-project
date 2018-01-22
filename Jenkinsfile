@@ -36,7 +36,7 @@ pipeline {
                 sh "cp dist/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/all/"
             }
         }
-    }
+    
     stage('Running on CentOS') {
          agent{
             label 'centOS'
@@ -47,6 +47,7 @@ pipeline {
             sh "java -jar rectanlge__${env.BUILD_NUMBER}.jar 3 4"
 
         }
+    }
     }
     post{
         always{
