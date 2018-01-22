@@ -8,10 +8,11 @@ pipeline {
     }
 
     stages {
-        agent {
-            label 'apache'
-        }
+        
         stage('Unit Test'){
+            agent {
+                label 'apache'
+            }
              steps{
                 sh 'ant -f test.xml -v'
                 junit 'reports/result.xml'
@@ -36,14 +37,14 @@ pipeline {
             }
         }
     
-    stage('Running on CentOS') {
-         agent{
-            label 'centOS'
+        stage('Running on CentOS') {
+            agent{
+                label 'centOS'
         
-         }
-        steps{
-            sh "wget http://sakkela3.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
-            sh "java -jar rectanlge__${env.BUILD_NUMBER}.jar 3 4"
+            }
+            steps{
+                sh "wget http://sakkela3.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
+                sh "java -jar rectanlge__${env.BUILD_NUMBER}.jar 3 4"
 
         }
     }
