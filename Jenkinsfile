@@ -1,15 +1,14 @@
 pipeline {
 
-    agent {
-        label 'none'
-    } 
+    agent none
+    
 
     options{
         buildDiscarder(logRotator(numToKeepStr: '2', artifactNumToKeepStr: '1'))
     }
 
     stages {
-        agent{
+        agent {
             label 'apache'
         }
         stage('Unit Test'){
