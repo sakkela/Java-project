@@ -18,7 +18,7 @@
     <delete dir="${report.dir}"/>
   </target>
 
- <target name="makedir"depends="clean" description="clean up">
+ <target name="makedir" depends="clean" description="clean up">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${report.dir}"/>
