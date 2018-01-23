@@ -38,7 +38,8 @@ pipeline {
             }
 
             steps{
-                sh "cp dist/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/all/"
+                sh "mkdir /var/www/html/rectangles/all/${env.BRANCH_NAME}"
+                sh "cp dist/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/all/${env.BRANCH_NAME}"
             }
         }
     
@@ -48,7 +49,7 @@ pipeline {
         
             }
             steps{
-                sh "wget http://sakkela3.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
+                sh "wget http://sakkela3.mylabserver.com/rectangles/all/${env.BRANCH_NAME}/rectangle_${env.BUILD_NUMBER}.jar"
                 sh "java -jar rectangle_${env.BUILD_NUMBER}.jar 3 4"
 
             }
@@ -58,7 +59,7 @@ pipeline {
                 docker 'openjdk:8u121-jre'
             }
              steps{
-                sh "wget http://sakkela3.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
+                sh "wget http://sakkela3.mylabserver.com/rectangles/all/${env.BRANCH_NAME}/rectangle_${env.BUILD_NUMBER}.jar"
                 sh "java -jar rectangle_${env.BUILD_NUMBER}.jar 3 4"
             }
         }
@@ -68,13 +69,35 @@ pipeline {
                 label 'apache'
             }
             when {
-                branch 'development'
+                branch 'master'
             }
             steps{
                 sh "cp /var/www/html/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/green/rectangle_${env.BUILD_NUMBER}.jar" 
                // sh "cp dist/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/green/rectangle_${env.BUILD_NUMBER}.jar"
             }
         }
+        stage('promote development branch to master'){
+
+            agent{
+                label 'apache'
+            }
+            when{
+                branch 'development'
+            }
+            steps{
+                echo "Stashing Any Local Changes"
+                sh 'git stash'
+                echo 'Cheching Out Development Branch'
+                sh 'git checkout development'
+                echo 'checking out master'
+                sh 'git checkout master'
+                echo 'checking development into master'
+                sh 'git marge development'
+                sh 'git push origin master'
+            }
+        }
+
+        
     
     }
    
