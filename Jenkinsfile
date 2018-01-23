@@ -92,7 +92,7 @@ pipeline {
                 echo 'checking out master'
                 sh 'git checkout master'
                 echo 'checking development into master'
-                sh 'git marge development'
+                sh 'git merge development'
                 sh 'git push origin master'
             }
         }
