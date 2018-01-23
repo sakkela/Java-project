@@ -77,9 +77,9 @@ pipeline {
             }
         }
         stage('promote development branch to master'){
-            
+
             agent{
-                lebel 'apache'
+                label 'apache'
             }
             when{
                 branch 'development'
