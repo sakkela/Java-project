@@ -42,8 +42,8 @@ pipeline {
             }
 
             steps{
-                //sh " if ![ -d "/var/www/html/rectangles/all/${env.BRANCH_NAME}" ]; then mkdir -p /var/www/html/rectangles/all/${env.BRANCH_NAME}; fi"
-                sh "mkdir -p /var/www/html/rectangles/all/${env.BRANCH_NAME}"
+                sh " if ![ -d '/var/www/html/rectangles/all/${env.BRANCH_NAME}' ]; then mkdir -p /var/www/html/rectangles/all/${env.BRANCH_NAME}; fi"
+                //sh "mkdir -p /var/www/html/rectangles/all/${env.BRANCH_NAME}"
                 sh "cp dist/rectangle_${env.MAJOR_VERSION}.${env.BUILD_NUMBER}.jar /var/www/html/rectangles/all/${env.BRANCH_NAME}"
             }
         }
@@ -97,8 +97,25 @@ pipeline {
             when{
                 branch 'development'
             }
-
-            steps{
+            
+            steps {
+                echo "Stashing Any Local Changes"
+                sh 'git stash'
+                echo "Checking Out Development Branch"
+                sh 'git checkout development'
+                echo 'Checking Out Master Branch'
+                sh 'git pull origin'
+                sh 'git checkout master'
+                echo 'Merging Development into Master Branch'
+                sh 'git merge development'
+                echo 'Pushing to Origin Master'
+                sh 'git push origin master'
+                echo 'Tagging the Release'
+                sh "git tag rectangle-${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"
+                sh "git push origin rectangle-${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"
+            }
+            
+            /*steps{
                 echo "Stashing Any Local Changes"
                 sh 'git stash'
                 echo 'Cheching Out Development Branch'
@@ -113,7 +130,7 @@ pipeline {
                 echo 'tagging release'
                 sh "git tag rectangle-${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"
                 sh "git push origin rectangle-${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"
-            }
+            }*/
         }
 
         
