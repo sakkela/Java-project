@@ -38,7 +38,7 @@ pipeline {
             }
 
             steps{
-                sh "mkdir /var/www/html/rectangles/all/${env.BRANCH_NAME}"
+                sh "mkdir -p /var/www/html/rectangles/all/${env.BRANCH_NAME}"
                 sh "cp dist/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/all/${env.BRANCH_NAME}"
             }
         }
@@ -65,14 +65,17 @@ pipeline {
         }
         
         stage("Promote to green"){
+            
             agent{
                 label 'apache'
             }
+
             when {
                 branch 'master'
             }
+
             steps{
-                sh "cp /var/www/html/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/green/rectangle_${env.BUILD_NUMBER}.jar" 
+                sh "cp /var/www/html/rectangles/all/${env.BRANCH_NAME}/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/green/rectangle_${env.BUILD_NUMBER}.jar" 
                // sh "cp dist/rectangle_${env.BUILD_NUMBER}.jar /var/www/html/rectangles/green/rectangle_${env.BUILD_NUMBER}.jar"
             }
         }
@@ -92,7 +95,7 @@ pipeline {
                 echo 'checking out master'
                 sh 'git checkout master'
                 echo 'checking development into master'
-                sh 'git marge development'
+                sh 'git merge development'
                 sh 'git push origin master'
             }
         }
