@@ -16,7 +16,8 @@ pipeline {
             agent {
                 label 'apache'
             }
-             steps{
+
+            steps{
                 sh 'ant -f test.xml -v'
                 junit 'reports/result.xml'
             }
@@ -51,6 +52,7 @@ pipeline {
                 label 'centOS'
         
             }
+
             steps{
                 sh "wget http://sakkela3.mylabserver.com/rectangles/all/${env.BRANCH_NAME}/rectangle_${env.MAJOR_VERSION}.${env.BUILD_NUMBER}.jar"
                 sh "java -jar rectangle_${env.MAJOR_VERSION}.${env.BUILD_NUMBER}.jar 3 4"
@@ -61,6 +63,7 @@ pipeline {
             agent{
                 docker 'openjdk:8u121-jre'
             }
+
              steps{
                 sh "wget http://sakkela3.mylabserver.com/rectangles/all/${env.BRANCH_NAME}/rectangle_${env.MAJOR_VERSION}.${env.BUILD_NUMBER}.jar"
                 sh "java -jar rectangle_${env.MAJOR_VERSION}.${env.BUILD_NUMBER}.jar 3 4"
@@ -99,6 +102,7 @@ pipeline {
                 sh 'git checkout master'
                 echo 'checking development into master'
                 sh 'git merge development'
+                sh 'git pull --rebase origin master'
                 sh 'git push origin master'
                 echo 'tagging release'
                 sh "git tag rectangle-${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"
