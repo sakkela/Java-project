@@ -59,7 +59,9 @@ pipeline {
 
             }
         }
+        
         stage("Test on Debian"){
+           
             agent{
                 docker 'openjdk:8u121-jre'
             }
@@ -90,9 +92,11 @@ pipeline {
             agent{
                 label 'apache'
             }
+
             when{
                 branch 'development'
             }
+
             steps{
                 echo "Stashing Any Local Changes"
                 sh 'git stash'
