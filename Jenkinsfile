@@ -42,7 +42,7 @@ pipeline {
             }
 
             steps{
-                sh "mkdir -p /var/www/html/rectangles/all/${env.BRANCH_NAME}"
+                sh " if ![ -d "/var/www/html/rectangles/all/${env.BRANCH_NAME}" ]; then mkdir -p /var/www/html/rectangles/all/${env.BRANCH_NAME}; fi"
                 sh "cp dist/rectangle_${env.MAJOR_VERSION}.${env.BUILD_NUMBER}.jar /var/www/html/rectangles/all/${env.BRANCH_NAME}"
             }
         }
@@ -105,8 +105,9 @@ pipeline {
                 echo 'checking out master'
                 sh 'git checkout master'
                 echo 'checking development into master'
-                sh 'git merge development'
                 sh 'git pull --rebase origin master'
+                sh 'git merge development'
+                sh 'git commit -m "Merging development and prod ${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"' 
                 sh 'git push origin master'
                 echo 'tagging release'
                 sh "git tag rectangle-${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"
