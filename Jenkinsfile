@@ -108,7 +108,7 @@ pipeline {
                 echo 'checking development into master'
                 sh 'git pull --rebase origin master'
                 sh 'git merge development'
-                sh 'git commit -m "Merging development and prod "' 
+                //sh 'git commit -m "Merging development and prod "' 
                 sh 'git push origin master'
                 echo 'tagging release'
                 sh "git tag rectangle-${env.MAJOR_VERSION}.${env.BUILD_NUMBER}"
